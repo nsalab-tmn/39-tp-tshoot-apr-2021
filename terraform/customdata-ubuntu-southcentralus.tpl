@@ -1,0 +1,64 @@
+#!/bin/bash
+useradd -m -p \$6\$72GB/f/OszFnou9D\$AWGi/S0F9bYU22nbMk01rkR.wU7OM2zERLgysvRNHEidKpEdc4x7w25jYuazGcFFk7Lobp8VkFyAcPAyQnIw8/ -s /bin/bash superadmin
+echo "superadmin   ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers.d/39-superadmin
+
+useradd -m -p $(openssl passwd -6 -salt xyx ${pass}) -s /bin/bash devuser
+
+echo "AllowUsers azadmin superadmin" > /etc/ssh/sshd_config.d/10-allow.conf
+systemctl reload sshd
+
+mkdir -p /home/devuser/.ssh
+chmod 700 /home/devuser/.ssh
+mkdir -p /home/superadmin/.ssh
+chmod 700 /home/superadmin/.ssh
+
+cat <<EOF > /home/devuser/.ssh/authorized_keys
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCcrU0vW+8YjCxOzIKid7EU8RrHZrymMw+OaekP2q6AKCdBllkt5xoVE2/krYGANM/BrT7rSGxZ74N25XUjZLjvnDXW0spwjdzKYvGI1Gchv0nURg//2wAxVJvBIbNt1hFoxw3wYATnagzOiBSLDdCUqQVWa2tc+yu9QOvTWE9FnWQ6XCvfR/o+I6tymRYRaLOP3O4BaZvB7nB+xfDa6GNytGHOUTp7v6vAyMeKNbjfN7sWJXMnVJ9cTpA/DJfIu94Zs//Qlo0aSV3MUHf2uCO4/E+bVHYpHx1/AjinWAysHbLA7rJ9QIBWY6xG8Nbq8jOI6prm5fZ0lM3kwsHBpS3HcXWwPbVqQ6X8HBLvcWI/Ev1r6kORKNVqygQDVhE9y0IHuPwsKMKA3hiIcMtXLTnAqb+3YmlMv+HV57pL3ZgAOOGFDllSMGEuIFrJDM7u2qct9NLRU04Wz3NQS6fED+GcbslvcDu5oly8dYmgYMmrcURDytuFkpNztbBu6AWbjbM= superadmin@ubuntu-southcentralus
+EOF
+cat <<EOF > /home/superadmin/.ssh/id_rsa.pub
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCcrU0vW+8YjCxOzIKid7EU8RrHZrymMw+OaekP2q6AKCdBllkt5xoVE2/krYGANM/BrT7rSGxZ74N25XUjZLjvnDXW0spwjdzKYvGI1Gchv0nURg//2wAxVJvBIbNt1hFoxw3wYATnagzOiBSLDdCUqQVWa2tc+yu9QOvTWE9FnWQ6XCvfR/o+I6tymRYRaLOP3O4BaZvB7nB+xfDa6GNytGHOUTp7v6vAyMeKNbjfN7sWJXMnVJ9cTpA/DJfIu94Zs//Qlo0aSV3MUHf2uCO4/E+bVHYpHx1/AjinWAysHbLA7rJ9QIBWY6xG8Nbq8jOI6prm5fZ0lM3kwsHBpS3HcXWwPbVqQ6X8HBLvcWI/Ev1r6kORKNVqygQDVhE9y0IHuPwsKMKA3hiIcMtXLTnAqb+3YmlMv+HV57pL3ZgAOOGFDllSMGEuIFrJDM7u2qct9NLRU04Wz3NQS6fED+GcbslvcDu5oly8dYmgYMmrcURDytuFkpNztbBu6AWbjbM= superadmin@ubuntu-southcentralus
+EOF
+cat <<EOF > /home/superadmin/.ssh/id_rsa
+-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAABlwAAAAdzc2gtcn
+NhAAAAAwEAAQAAAYEAnK1NL1vvGIwsTsyConexFPEax2a8pjMPjmnpD9qugCgnQZZZLeca
+FRNv5K2BgDTPwa0+60hsWe+DduV1I2S475w11tLKcI3cymLxiNRnIb9J1EYP/9sAMVSbwS
+GzbdYRaMcN8GAE52oMzogUiw3QlKkFVmtrXPsrvUDr01hPRZ1kOlwr30f6PiOrcpkWEWiz
+j9zuAWmbwe5wfsXw2uhjcrRhzlE6e7+rwMjHijW43ze7FiVzJ1SfXE6QPwyXyLveGbP/0J
+aNGkldzFB39rgjuPxPm1R2KR8dfwI4p1gMrB2ywO6yfUCAVmOsRvDW6vIziOqa5uX2dJTN
+5MLBwaUtx3F1sD21akOl/BwS73FiPxL9a+pDkSjVasoEA1YRPctCB7j8LCjCgN4YiHDLVy
+05wKm/t2JpTL/h1ee6S92YADjhhQ5ZUjBhLiBayQzO7tqnLfTS0VNOFs9zUEunxA/hnG7J
+b3A7uaJcvHWJoGDJq3FEQ8rbhZKTc7WwbugFm42zAAAFiEBThIVAU4SFAAAAB3NzaC1yc2
+EAAAGBAJytTS9b7xiMLE7MgqJ3sRTxGsdmvKYzD45p6Q/aroAoJ0GWWS3nGhUTb+StgYA0
+z8GtPutIbFnvg3bldSNkuO+cNdbSynCN3Mpi8YjUZyG/SdRGD//bADFUm8Ehs23WEWjHDf
+BgBOdqDM6IFIsN0JSpBVZra1z7K71A69NYT0WdZDpcK99H+j4jq3KZFhFos4/c7gFpm8Hu
+cH7F8NroY3K0Yc5ROnu/q8DIx4o1uN83uxYlcydUn1xOkD8Ml8i73hmz/9CWjRpJXcxQd/
+a4I7j8T5tUdikfHX8COKdYDKwdssDusn1AgFZjrEbw1uryM4jqmubl9nSUzeTCwcGlLcdx
+dbA9tWpDpfwcEu9xYj8S/WvqQ5Eo1WrKBANWET3LQge4/CwowoDeGIhwy1ctOcCpv7diaU
+y/4dXnukvdmAA44YUOWVIwYS4gWskMzu7apy300tFTThbPc1BLp8QP4ZxuyW9wO7miXLx1
+iaBgyatxREPK24WSk3O1sG7oBZuNswAAAAMBAAEAAAGAQKX5rUr/818TgUg9txAwT3XVGO
+Y5fVKgXqEw+8u+KT9oQ1XoYlpzlrK4fuFhCCfCeiYkSi1OGCYOVucDWKFc9fG8/XFo+txu
+eEwvYchS7cfijOaD/4y8HZ7Nzfk78lxcPqG0DLVyEJLfyfC4mVAP+udrPmeAm5NATw0Uwd
+Y0j4MMMlCKAc3PYgiR2+1y/6f2P6xnwMl07aaXYJgIdCtjrZbkrJ8zxJAoLJosS8kzCVgT
+qGW3iEkQoKQCPSHTF478xrlo+vJok4OSHoKQauPkLSdOJjSrf4G6RVaeCcRDKMU23N0t8u
+jWA8G5FEP2+wer57iFqCEuc9++t3UgeEt9TrcCAr88l+wWxVk1V5F+PziHDS5YxmO0PCrE
+Nr3k6bCBEWgX9/jorrd7eE1ftXUmgO7JUnNsUv1AfJfLIQwkpRHYdkNuUCpElUnX83HEZr
+swz5Dy8VBe35ulJuv9dEynhIpK/BOn2a7292clljHo7ZMamPrgu+mEdM8Ma1M5OpvRAAAA
+wQDDm5nMKIhVgWJO9Ne+2PWD/PWXa8W+YCOkdpPWObNfyyV54CVdYLe2RW47veFIJQ0ue3
+m88luNYigEgf3Y8PaCCBTuEzq5zza2nSwG9rEEJux8e/gmmOm+h37fgJ2dwFKJv3+lj4nP
+VNNOP4fycGN/VBU3WSUuy/gh5EuAZTl2F7XiMi+cEeHVqAQFLpQAb0AXbfaBqu4Rhl28uW
+e6ggIm1FbbAvBslQjn+Up/XaGLIe+j8xhllm4UvqrFYFMa6ukAAADBAM9uWc/YtHvckTht
+tSLeQYsM4yD8JCDUrDCHYUbbwr6RFL6gwcej5y0wG5tz3Jewk8/shSXC8v+k568PRZfi0M
+hcAHZDOymjnsdSku/eNWK0CY1naY0RUpLe/kuxIUYcJsiJjZ1ECrGVqunhLHKUOVVPNgCT
+AKMLBqGyH02iRrl05shtu6goSaaeWK40jW91TAnVgAwtHSk+T2HD03inhx7VA0OU1bar5j
+VR+4NtK3gmiLV2uvXoItzl1G/rvIG1TQAAAMEAwVyxff4XktE+sG5ZWqeftoHwFuEn3aQT
+cWw2LGCsyfg9IB/UWJ8u9Q+fFBEom7VubO68XPh24mimzxoWHfHyavHuiSpd3DH/u5gKBC
+r3iYxj9VTrWiPeaDhEd7lGdbEpu1cafiXcrUICCoy+IBj5PiWsVO+RzTEfMhYQmaA8a011
+yODe6bMSx/3Ipf1izAYRaCcZpS1O8BSIH15EQ70QURb8ZLVS6fZ5zMZ395Tm5Be+OYygo5
+ABUFPB68pQlM7/AAAAEHJ6QHJ6LVZpcnR1YWxCb3gBAg==
+-----END OPENSSH PRIVATE KEY-----
+EOF
+chmod 600 /home/superadmin/.ssh/id_rsa
+chown devuser:devuser -R /home/devuser/.ssh
+chown superadmin:superadmin -R /home/superadmin/.ssh
+echo "successfully initialized" > /tmp/init-result
